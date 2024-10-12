@@ -1,5 +1,11 @@
 package com.prafull.secondshelf.dto
 
+import lombok.Builder
+
+@Builder
 data class UserDto(
-    val id: Long
+    val username: String,
+    val password: String,
+    val fullName: String? = null,
+    val mobileNumber: String? = null
 )

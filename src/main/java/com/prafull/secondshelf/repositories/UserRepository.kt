@@ -1,13 +1,19 @@
 package com.prafull.secondshelf.repositories
 
+import com.prafull.secondshelf.model.Book
 import com.prafull.secondshelf.model.UserEntity
-import org.springframework.data.jpa.repository.JpaRepository
-
+import org.springframework.data.jpa.repository.Query
+import org.springframework.data.repository.CrudRepository
+import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
 
 @Repository
-interface UserRepository : JpaRepository<UserEntity, Long> {
+interface UserRepository : CrudRepository<UserEntity, Long> {
 
+    fun findByUsername(username: String): UserEntity?
+
+    @Query("SELECT u.listedBooks FROM UserEntity u WHERE u.username = :username")
+    fun getBooksFromUser(@Param("username") username: String): List<Book?>
 }
 
 /**
