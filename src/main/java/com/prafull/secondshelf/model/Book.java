@@ -43,7 +43,7 @@ public class Book {
     @Column(nullable = false)
     private Double price;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "seller_id", nullable = false)
     @JsonManagedReference
     private UserEntity seller;
@@ -52,7 +52,7 @@ public class Book {
     private LocalDateTime listedAt;
 
     @Column(name = "is_available")
-    private boolean isAvailable;
+    private boolean isAvailable = true;
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Transaction> transactions;

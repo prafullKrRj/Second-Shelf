@@ -4,6 +4,7 @@ import com.prafull.secondshelf.dto.BookDto
 import com.prafull.secondshelf.dto.TransactionDto
 import com.prafull.secondshelf.services.BookService
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
 
 // This is a controller class for Book entity which will handle all the requests related to Book entity.
@@ -13,31 +14,33 @@ import org.springframework.web.bind.annotation.*
 class BookController(
     private val bookService: BookService
 ) {
-
-    @GetMapping("/all")
-    fun getAllBooks(): ResponseEntity<List<BookDto>> {
+    @GetMapping("/search")
+    fun searchBooks(@RequestParam("query") query: String): ResponseEntity<Any> {
         return try {
-            val books = bookService.getAllBooks()
+            val auth = SecurityContextHolder.getContext().authentication
+            val books = bookService.searchBooks(query, auth.name)
             ResponseEntity.ok(books)
         } catch (e: Exception) {
             ResponseEntity.badRequest().body(null)
         }
     }
 
-    @PostMapping("/add/{username}")
-    fun addBook(@PathVariable username: String, @RequestBody bookDto: BookDto): ResponseEntity<Any> {
+    @PostMapping("/add")
+    fun addBook(@RequestBody bookDto: BookDto): ResponseEntity<Any> {
         return try {
-            val book = bookService.addBook(username, bookDto)
+            val auth = SecurityContextHolder.getContext().authentication
+            val book = bookService.addBook(auth.name, bookDto)
             ResponseEntity.ok(book)
         } catch (e: Exception) {
             ResponseEntity.badRequest().body(e)
         }
     }
 
-    @PostMapping("/{username}/sold-book")
-    fun soldBook(@PathVariable username: String, @RequestBody transaction: TransactionDto): ResponseEntity<Any> {
+    @PostMapping("/sold-book")
+    fun soldBook(@RequestBody transaction: TransactionDto): ResponseEntity<Any> {
         try {
-            bookService.soldBook(username, transaction)
+            val auth = SecurityContextHolder.getContext().authentication
+            bookService.soldBook(auth.name, transaction)
             return ResponseEntity.ok("Book sold successfully")
         } catch (e: Exception) {
             return ResponseEntity.badRequest().body(e.message)

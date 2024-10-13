@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository
 @Repository
 interface UserRepository : CrudRepository<UserEntity, Long> {
 
-    fun findByUsername(username: String): UserEntity?
+    fun findByUsername(username: String?): UserEntity?
 
     @Query("select username from UserEntity ")
     fun getAllUsers(): List<String>

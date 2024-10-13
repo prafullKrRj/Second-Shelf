@@ -8,6 +8,7 @@ import com.prafull.secondshelf.model.UserEntity;
 import com.prafull.secondshelf.repositories.UserRepository;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
 
+    private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
     private static final Logger logger = Logger.getLogger(UserService.class.getName());
     private final UserRepository userRepository;
 
@@ -28,7 +30,9 @@ public class UserService {
         if (userRepository.findByUsername(user.getUsername()) != null) {
             throw new Exception("User already exists");
         }
-        userRepository.save(new UserEntity(user));
+        userRepository.save(new UserEntity(
+                new UserDto(user.getUsername(), encoder.encode(user.getPassword()), user.getFullName(), user.getMobileNumber(), user.getRole())
+        ));
     }
 
 

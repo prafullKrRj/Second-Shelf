@@ -101,4 +101,10 @@ public class BookService {
         userService.saveUser(buyer);
         booksRepository.save(book);
     }
+
+    @Nullable
+    public List<BookDto> searchBooks(@NotNull String query, @NotNull String username) throws Exception {
+        UserEntity user = userService.getUser(username);
+        return Objects.requireNonNull(booksRepository.searchBooks(query, user.getId())).stream().map(Book::toBookDto).collect(Collectors.toList());
+    }
 }

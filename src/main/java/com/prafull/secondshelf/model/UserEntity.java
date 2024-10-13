@@ -47,11 +47,8 @@ public class UserEntity {
     @JsonManagedReference
     private Set<Transaction> soldBooks = new HashSet<>();
 
-    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
-    @Column(name = "role", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Set<Role> roles = new HashSet<>();
+    @Column(name = "role")
+    private String role;
 
 
     public UserEntity(UserDto userDto) {
@@ -59,6 +56,7 @@ public class UserEntity {
         this.password = userDto.getPassword();
         this.fullName = userDto.getFullName();
         this.mobileNumber = userDto.getMobileNumber();
+        this.role = userDto.getRole();
     }
 
     public void addBook(Book book) {
@@ -71,7 +69,8 @@ public class UserEntity {
                 username,
                 password,
                 fullName,
-                mobileNumber
+                mobileNumber,
+                role
         );
     }
 
