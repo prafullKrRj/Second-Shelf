@@ -32,5 +32,13 @@ class BookController(
             ResponseEntity.badRequest().body(e)
         }
     }
-
+    @PostMapping("/buy/{username}/{bookId}")
+    fun buyBook(@PathVariable username: String, @PathVariable bookId: Long): ResponseEntity<Any> {
+        return try {
+            val book = bookService.buyBook(username, bookId)
+            ResponseEntity.ok(book)
+        } catch (e: Exception) {
+            ResponseEntity.badRequest().body(e)
+        }
+    }
 }

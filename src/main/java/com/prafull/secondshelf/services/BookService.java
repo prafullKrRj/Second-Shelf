@@ -82,4 +82,9 @@ public class BookService {
             deleteBook(bookId);
         }
     }
+
+    @Nullable
+    public void buyBook(@NotNull String username, long bookId) {
+        
+    }
 }
