@@ -1,6 +1,7 @@
 package com.prafull.secondshelf.services;
 
 import com.prafull.secondshelf.dto.BookDto;
+import com.prafull.secondshelf.dto.TransactionDto;
 import com.prafull.secondshelf.dto.UserDto;
 import com.prafull.secondshelf.model.Book;
 import com.prafull.secondshelf.model.UserEntity;
@@ -66,5 +67,12 @@ public class UserService {
         user.setFullName(userDto.getFullName());
         user.setMobileNumber(userDto.getMobileNumber());
         userRepository.save(user);
+    }
+
+    public void soldBook(@NotNull String username, @NotNull TransactionDto transaction) throws Exception {
+    }
+
+    public UserEntity getUserFromId(long buyerId) throws Exception {
+        return userRepository.findById(buyerId).orElseThrow(() -> new Exception("User not found"));
     }
 }

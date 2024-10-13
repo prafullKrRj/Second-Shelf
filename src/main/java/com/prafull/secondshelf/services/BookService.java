@@ -1,7 +1,9 @@
 package com.prafull.secondshelf.services;
 
 import com.prafull.secondshelf.dto.BookDto;
+import com.prafull.secondshelf.dto.TransactionDto;
 import com.prafull.secondshelf.model.Book;
+import com.prafull.secondshelf.model.Transaction;
 import com.prafull.secondshelf.model.UserEntity;
 import com.prafull.secondshelf.repositories.BookRepository;
 import jakarta.transaction.Transactional;
@@ -17,10 +19,12 @@ public class BookService {
 
     private final BookRepository booksRepository;
     private final UserService userService;
+    private final TransactionService transactionService;
 
-    public BookService(BookRepository booksRepository, UserService us) {
+    public BookService(BookRepository booksRepository, UserService us, TransactionService ts) {
         this.booksRepository = booksRepository;
         this.userService = us;
+        this.transactionService = ts;
     }
 
     public List<BookDto> getAllBooksToSellByUsername(String username) throws Exception {
@@ -83,8 +87,18 @@ public class BookService {
         }
     }
 
-    @Nullable
-    public void buyBook(@NotNull String username, long bookId) {
-        
+
+    @Transactional
+    public void soldBook(@NotNull String username, @NotNull TransactionDto transaction) throws Exception {
+        UserEntity seller = userService.getUser(username);
+        UserEntity buyer = userService.getUser(transaction.getBuyerUserName());
+        Book book = getBookById(transaction.getBookId()).orElseThrow(() -> new Exception("Book not found"));
+        book.setAvailable(false);
+        Transaction transaction1 = transactionService.saveTransaction(transaction, seller, buyer, book);
+        seller.getSoldBooks().add(transaction1);
+        buyer.getBoughtBooks().add(transaction1);
+        userService.saveUser(seller);
+        userService.saveUser(buyer);
+        booksRepository.save(book);
     }
 }

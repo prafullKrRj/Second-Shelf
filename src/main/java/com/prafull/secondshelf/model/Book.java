@@ -1,5 +1,6 @@
 package com.prafull.secondshelf.model;
 
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.prafull.secondshelf.dto.BookDto;
 import jakarta.persistence.*;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "books")
@@ -51,6 +53,9 @@ public class Book {
 
     @Column(name = "is_available")
     private boolean isAvailable;
+
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Transaction> transactions;
 
     public Book(BookDto book) {
         this.title = book.getTitle();

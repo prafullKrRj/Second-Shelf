@@ -1,5 +1,6 @@
 package com.prafull.secondshelf.model;
 
+import com.prafull.secondshelf.dto.TransactionDto;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,5 +32,10 @@ public class Transaction {
     private Double amount;
 
     @Column(name = "transaction_date", nullable = false)
-    private LocalDateTime transactionDate;
+    private LocalDateTime transactionDate = LocalDateTime.now();
+
+    public Transaction(TransactionDto dto) {
+        this.amount = dto.getAmount();
+        this.transactionDate = dto.getTransactionDate();
+    }
 }

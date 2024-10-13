@@ -1,6 +1,7 @@
 package com.prafull.secondshelf.controllers
 
 import com.prafull.secondshelf.dto.BookDto
+import com.prafull.secondshelf.dto.TransactionDto
 import com.prafull.secondshelf.services.BookService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -32,13 +33,14 @@ class BookController(
             ResponseEntity.badRequest().body(e)
         }
     }
-    @PostMapping("/buy/{username}/{bookId}")
-    fun buyBook(@PathVariable username: String, @PathVariable bookId: Long): ResponseEntity<Any> {
-        return try {
-            val book = bookService.buyBook(username, bookId)
-            ResponseEntity.ok(book)
+
+    @PostMapping("/{username}/sold-book")
+    fun soldBook(@PathVariable username: String, @RequestBody transaction: TransactionDto): ResponseEntity<Any> {
+        try {
+            bookService.soldBook(username, transaction)
+            return ResponseEntity.ok("Book sold successfully")
         } catch (e: Exception) {
-            ResponseEntity.badRequest().body(e)
+            return ResponseEntity.badRequest().body(e.message)
         }
     }
 }

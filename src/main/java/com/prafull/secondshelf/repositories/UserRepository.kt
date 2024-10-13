@@ -15,8 +15,11 @@ interface UserRepository : CrudRepository<UserEntity, Long> {
     @Query("select username from UserEntity ")
     fun getAllUsers(): List<String>
 
-    @Query("SELECT u.listedBooks FROM UserEntity u WHERE u.username = :username")
+    @Query("SELECT b FROM UserEntity u JOIN u.listedBooks b WHERE u.username = :username AND b.isAvailable = true")
     fun getBooksFromUser(@Param("username") username: String): List<Book?>
+
+    @Query("SELECT b FROM UserEntity u JOIN u.listedBooks b WHERE u.username = :username AND b.isAvailable = false")
+    fun getSoldFromUser(@Param("username") username: String): List<Book?>
 
 
 }
