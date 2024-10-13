@@ -12,8 +12,13 @@ interface UserRepository : CrudRepository<UserEntity, Long> {
 
     fun findByUsername(username: String): UserEntity?
 
+    @Query("select username from UserEntity ")
+    fun getAllUsers(): List<String>
+
     @Query("SELECT u.listedBooks FROM UserEntity u WHERE u.username = :username")
     fun getBooksFromUser(@Param("username") username: String): List<Book?>
+
+
 }
 
 /**

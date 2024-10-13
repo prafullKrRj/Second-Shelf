@@ -1,11 +1,13 @@
 package com.prafull.secondshelf.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.prafull.secondshelf.dto.BookDto;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "books")
@@ -39,8 +41,9 @@ public class Book {
     @Column(nullable = false)
     private Double price;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seller_id", nullable = false)
+    @JsonManagedReference
     private UserEntity seller;
 
     @Column(name = "listed_at")
@@ -61,7 +64,21 @@ public class Book {
         this.listedAt = book.getListedAt();
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Book book = (Book) obj;
+        return Objects.equals(id, book.id) &&
+                Objects.equals(title, book.title);
+    }
+
     public BookDto toBookDto() {
-        return new BookDto(title, author, yearOfPrinting, description, genre, coverImageUrl, numberOfPages, price, listedAt);
+        return new BookDto(title, author, yearOfPrinting, description, genre, coverImageUrl, numberOfPages, price, listedAt, id);
     }
 }

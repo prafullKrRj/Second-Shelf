@@ -13,5 +13,6 @@ data class BookDto(
     val coverImageUrl: String?,
     val numberOfPages: Int?,
     val price: Double,
-    val listedAt: LocalDateTime
+    val listedAt: LocalDateTime = LocalDateTime.now(),
+    val id: Long? = 0
 )

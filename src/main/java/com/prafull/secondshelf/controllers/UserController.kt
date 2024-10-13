@@ -1,6 +1,5 @@
 package com.prafull.secondshelf.controllers
 
-import com.prafull.secondshelf.dto.BookDto
 import com.prafull.secondshelf.dto.UserDto
 import com.prafull.secondshelf.services.UserService
 import org.springframework.http.ResponseEntity
@@ -11,12 +10,12 @@ import org.springframework.web.bind.annotation.*
  *     Description:
  *          This is a controller class for UserEntity related operations.
  * */
+
 @RestController
 @RequestMapping("/api/user")
 class UserController(
     private val userService: UserService
 ) {
-
     @PostMapping("/add")
     fun addUser(@RequestBody userDto: UserDto): ResponseEntity<Any> {
         try {
@@ -27,21 +26,21 @@ class UserController(
         }
     }
 
-    @GetMapping("/books/{username}")
+    @GetMapping("/{username}/books")
     fun getListedBooks(@PathVariable username: String): ResponseEntity<Any> {
         try {
-            val books = userService.getAllBooksToSellByUsername(username)
+            val books = userService.getListedBooks(username)
             return ResponseEntity.ok(books)
         } catch (e: Exception) {
             return ResponseEntity.badRequest().body(e.message)
         }
     }
 
-    @PostMapping("/books/{username}")
-    fun addBook(@PathVariable username: String, @RequestBody book: BookDto): ResponseEntity<Any> {
+    @PutMapping("/{username}")
+    fun updateUser(@PathVariable username: String, @RequestBody userDto: UserDto): ResponseEntity<Any> {
         try {
-            userService.addBookToSell(username, book)
-            return ResponseEntity.ok("Book added successfully")
+            userService.updateUser(username, userDto)
+            return ResponseEntity.ok("User updated successfully")
         } catch (e: Exception) {
             return ResponseEntity.badRequest().body(e.message)
         }

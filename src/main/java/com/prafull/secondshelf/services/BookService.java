@@ -4,26 +4,62 @@ import com.prafull.secondshelf.dto.BookDto;
 import com.prafull.secondshelf.model.Book;
 import com.prafull.secondshelf.model.UserEntity;
 import com.prafull.secondshelf.repositories.BookRepository;
+import jakarta.transaction.Transactional;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class BookService {
 
     private final BookRepository booksRepository;
+    private final UserService userService;
 
-    public BookService(BookRepository booksRepository) {
+    public BookService(BookRepository booksRepository, UserService us) {
         this.booksRepository = booksRepository;
+        this.userService = us;
     }
 
-    public void addBook(BookDto bookDto, UserEntity userEntity) {
+    public List<BookDto> getAllBooksToSellByUsername(String username) throws Exception {
+        UserEntity user = userService.getUser(username);
+        return user.getListedBooks().stream().map(Book::toBookDto).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void deleteListing(String username, Long bookId) throws Exception {
+        UserEntity user = userService.getUser(username);
+        Optional<Book> book = getBookById(bookId);
+        if (book.isEmpty()) throw new Exception("Wrong Book Id");
+        user.getListedBooks().removeIf(book1 -> Objects.equals(book1.getId(), bookId));
+        userService.saveUser(user);
+        deleteBook(bookId);
+    }
+
+
+    @Transactional // for proper synchronization
+    public void deleteAllListing(@NotNull String username) throws Exception {
+        UserEntity user = userService.getUser(username);
+        deleteBooks(user.getListedBooks().stream().map(Book::getId).collect(Collectors.toList()));
+        user.setListedBooks(Collections.emptySet());
+    }
+
+    /*
+     * The issue is that the book is being added to both the
+     * `listedBooks` set of the `UserEntity` and the `booksRepository`.
+     *  This can cause the book to be saved twice. You should only add the book to the
+     *  `booksRepository` and let the persistence context handle the relationship.
+     */
+    @Transactional
+    public void addBook(String username, BookDto bookDto) throws Exception {
+        UserEntity user = userService.getUser(username);
         Book book = new Book(bookDto);
-        book.setSeller(userEntity);
+        book.setSeller(user);
         booksRepository.save(book);
+        user.getListedBooks().add(book);
+        userService.saveUser(user);
     }
 
     @Nullable
@@ -31,5 +67,19 @@ public class BookService {
         List<Book> books = new ArrayList<>();
         booksRepository.findAll().forEach(books::add);
         return books.stream().map(Book::toBookDto).collect(Collectors.toList());
+    }
+
+    public void deleteBook(Long bookId) {
+        booksRepository.deleteById(bookId);
+    }
+
+    public Optional<Book> getBookById(Long bookId) {
+        return booksRepository.findById(bookId);
+    }
+
+    public void deleteBooks(List<Long> bookIds) throws Exception {
+        for (Long bookId : bookIds) {
+            deleteBook(bookId);
+        }
     }
 }
