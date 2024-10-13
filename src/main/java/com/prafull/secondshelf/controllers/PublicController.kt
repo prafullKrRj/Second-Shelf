@@ -40,13 +40,5 @@ class PublicController(
         }
     }
 
-    @PostMapping("/add")
-    fun addUser(@RequestBody userDto: UserDto): ResponseEntity<Any> {
-        try {
-            userService.saveNewUser(userDto)
-            return ResponseEntity.ok("User added successfully")
-        } catch (e: Exception) {
-            return ResponseEntity.badRequest().body(e.message)
-        }
-    }
+
 }

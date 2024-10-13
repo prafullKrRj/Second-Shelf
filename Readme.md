@@ -5,7 +5,7 @@ Spring Boot, with Gradle as the build tool. The frontend will be developed in An
 
 ## Project Structure
 
-- **Backend**: Java, Spring Boot
+- **Backend**: Java, Kotlin, Spring Boot
 - **Build Tool**: Gradle
 - **Frontend**: Android (planned)
 
