@@ -4,6 +4,7 @@ import com.prafull.secondshelf.dto.BookDto;
 import com.prafull.secondshelf.dto.TransactionDto;
 import com.prafull.secondshelf.dto.UserDto;
 import com.prafull.secondshelf.model.Book;
+import com.prafull.secondshelf.model.Transaction;
 import com.prafull.secondshelf.model.UserEntity;
 import com.prafull.secondshelf.repositories.UserRepository;
 import org.jetbrains.annotations.NotNull;
@@ -78,5 +79,16 @@ public class UserService {
 
     public UserEntity getUserFromId(long buyerId) throws Exception {
         return userRepository.findById(buyerId).orElseThrow(() -> new Exception("User not found"));
+    }
+
+    public List<TransactionDto> getSoldBooks(@NotNull String name) throws Exception {
+        UserEntity user = getUser(name);
+        return user.getSoldBooks().stream().map(Transaction::toDto).collect(Collectors.toList());
+    }
+
+    @NotNull
+    public List<TransactionDto> getBoughtBooks(@Nullable String name) throws Exception {
+        UserEntity user = getUser(name);
+        return user.getBoughtBooks().stream().map(Transaction::toDto).collect(Collectors.toList());
     }
 }

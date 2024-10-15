@@ -1,13 +1,13 @@
 package com.prafull.secondshelf.dto
 
 import lombok.Builder
-import java.time.LocalDateTime
 
 @Builder
 data class TransactionDto(
     val bookId: Long,
+    val transactionId: Long = 0,
     val amount: Double,
-    val transactionDate: LocalDateTime = LocalDateTime.now(),
-    val sellerUserName: String,
-    val buyerUserName: String
+    val transactionDate: Long = System.currentTimeMillis(),
+    val sellerUserName: String? = null,
+    val buyerUserName: String? = null
 )

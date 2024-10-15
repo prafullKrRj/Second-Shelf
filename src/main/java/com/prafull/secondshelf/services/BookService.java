@@ -57,13 +57,14 @@ public class BookService {
      *  `booksRepository` and let the persistence context handle the relationship.
      */
     @Transactional
-    public void addBook(String username, BookDto bookDto) throws Exception {
+    public Book addBook(String username, BookDto bookDto) throws Exception {
         UserEntity user = userService.getUser(username);
         Book book = new Book(bookDto);
         book.setSeller(user);
         booksRepository.save(book);
         user.getListedBooks().add(book);
         userService.saveUser(user);
+        return book;
     }
 
     @Nullable
@@ -87,10 +88,11 @@ public class BookService {
         }
     }
 
-
     @Transactional
-    public void soldBook(@NotNull String username, @NotNull TransactionDto transaction) throws Exception {
+    public void sellBook(@NotNull String username, @NotNull TransactionDto transaction) throws Exception {
         UserEntity seller = userService.getUser(username);
+        if (Objects.equals(transaction.getBuyerUserName(), username))
+            throw new Exception("You can't buy your own book");
         UserEntity buyer = userService.getUser(transaction.getBuyerUserName());
         Book book = getBookById(transaction.getBookId()).orElseThrow(() -> new Exception("Book not found"));
         book.setAvailable(false);
@@ -106,5 +108,23 @@ public class BookService {
     public List<BookDto> searchBooks(@NotNull String query, @NotNull String username) throws Exception {
         UserEntity user = userService.getUser(username);
         return Objects.requireNonNull(booksRepository.searchBooks(query, user.getId())).stream().map(Book::toBookDto).collect(Collectors.toList());
+    }
+
+    @Nullable
+    public List<BookDto> getRandomBooks(String username) throws Exception {
+        UserEntity user = userService.getUser(username);
+        return Objects.requireNonNull(booksRepository.getRandomBooks(user.getId())).stream().map(Book::toBookDto).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void addMultipleBooks(@Nullable String name, @NotNull List<BookDto> booksDto) throws Exception {
+        UserEntity user = userService.getUser(name);
+        for (BookDto bookDto : booksDto) {
+            Book book = new Book(bookDto);
+            book.setSeller(user);
+            booksRepository.save(book);
+            user.getListedBooks().add(book);
+        }
+        userService.saveUser(user);
     }
 }

@@ -34,7 +34,7 @@ public class UserEntity {
     private String mobileNumber;
 
     @Column(name = "created_at")
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private Long createdAt = System.currentTimeMillis();
 
 
     @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)

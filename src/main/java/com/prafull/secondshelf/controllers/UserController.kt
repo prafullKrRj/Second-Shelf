@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.*
 class UserController(
     private val userService: UserService
 ) {
-
-
     @GetMapping("/books")
     fun getListedBooks(): ResponseEntity<Any> {
         try {
@@ -36,10 +34,42 @@ class UserController(
         try {
             val auth = SecurityContextHolder.getContext().authentication
             userService.updateUser(auth.name, userDto)
-            return ResponseEntity.ok("User updated successfully")
+            return ResponseEntity.ok(userDto)
         } catch (e: Exception) {
             return ResponseEntity.badRequest().body(e.message)
         }
     }
 
+    @GetMapping("/sold-books")
+    fun getSoldBooks(): ResponseEntity<Any> {
+        try {
+            val auth = SecurityContextHolder.getContext().authentication
+            val books = userService.getSoldBooks(auth.name)
+            return ResponseEntity.ok(books)
+        } catch (e: Exception) {
+            return ResponseEntity.badRequest().body(e.message)
+        }
+    }
+
+    @GetMapping("/bought-books")
+    fun getBoughtBooks(): ResponseEntity<Any> {
+        try {
+            val auth = SecurityContextHolder.getContext().authentication
+            val books = userService.getBoughtBooks(auth.name)
+            return ResponseEntity.ok(books)
+        } catch (e: Exception) {
+            return ResponseEntity.badRequest().body(e.message)
+        }
+    }
+
+    @GetMapping
+    fun getUser(): ResponseEntity<Any> {
+        try {
+            val auth = SecurityContextHolder.getContext().authentication
+            val user = userService.getUser(auth.name)
+            return ResponseEntity.ok(user.toDto())
+        } catch (e: Exception) {
+            return ResponseEntity.badRequest().body(e.message)
+        }
+    }
 }

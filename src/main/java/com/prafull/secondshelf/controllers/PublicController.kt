@@ -1,11 +1,12 @@
 package com.prafull.secondshelf.controllers
 
 import com.prafull.secondshelf.dto.BookDto
-import com.prafull.secondshelf.dto.UserDto
 import com.prafull.secondshelf.services.BookService
 import com.prafull.secondshelf.services.UserService
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
 
 @RestController
@@ -16,8 +17,8 @@ class PublicController(
 ) {
 
     @GetMapping("/health-check")
-    fun healthCheck(): String {
-        return "I am healthy"
+    fun healthCheck(): ResponseEntity<Any> {
+        return ResponseEntity.ok(GeneralResponse(true, "Server is up and running"))
     }
 
     @GetMapping("/all")
@@ -39,6 +40,5 @@ class PublicController(
             return ResponseEntity.badRequest().body(e.message)
         }
     }
-
 
 }

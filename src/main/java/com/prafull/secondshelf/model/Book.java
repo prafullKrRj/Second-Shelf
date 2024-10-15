@@ -7,7 +7,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
 
@@ -49,13 +48,14 @@ public class Book {
     private UserEntity seller;
 
     @Column(name = "listed_at")
-    private LocalDateTime listedAt;
+    private Long listedAt;
 
     @Column(name = "is_available")
     private boolean isAvailable = true;
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Transaction> transactions;
+
 
     public Book(BookDto book) {
         this.title = book.getTitle();
@@ -84,6 +84,6 @@ public class Book {
     }
 
     public BookDto toBookDto() {
-        return new BookDto(title, author, yearOfPrinting, description, genre, coverImageUrl, numberOfPages, price, listedAt, id);
+        return new BookDto(title, author, yearOfPrinting, description, genre, coverImageUrl, numberOfPages, price, listedAt, id, seller.getUsername(), seller.getMobileNumber(), seller.getFullName());
     }
 }

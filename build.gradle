@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+
     id 'org.springframework.boot' version '3.3.4'
     id 'io.spring.dependency-management' version '1.1.6'
     id 'io.freefair.lombok' version '6.4.3'
@@ -27,6 +28,7 @@ dependencies {
     implementation 'org.projectlombok:lombok:1.18.24'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+    implementation 'org.springframework.boot:spring-boot-maven-plugin'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 

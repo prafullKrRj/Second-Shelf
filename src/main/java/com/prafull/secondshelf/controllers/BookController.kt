@@ -36,14 +36,40 @@ class BookController(
         }
     }
 
-    @PostMapping("/sold-book")
+    @PostMapping("/addMultiple")
+    fun addMultipleBooks(@RequestBody booksDto: List<BookDto>): ResponseEntity<Any> {
+        return try {
+            val auth = SecurityContextHolder.getContext().authentication
+            val books = bookService.addMultipleBooks(auth.name, booksDto)
+            ResponseEntity.ok(books)
+        } catch (e: Exception) {
+            ResponseEntity.badRequest().body(e)
+        }
+    }
+
+    @PostMapping("/sell-book")
     fun soldBook(@RequestBody transaction: TransactionDto): ResponseEntity<Any> {
         try {
             val auth = SecurityContextHolder.getContext().authentication
-            bookService.soldBook(auth.name, transaction)
-            return ResponseEntity.ok("Book sold successfully")
+            bookService.sellBook(
+                auth.name, transaction.copy(
+                    sellerUserName = auth.name
+                )
+            )
+            return ResponseEntity.ok(GeneralResponse(success = true, "Book sold successfully"))
         } catch (e: Exception) {
             return ResponseEntity.badRequest().body(e.message)
+        }
+    }
+
+    @GetMapping("/getRandomBooks")
+    fun getRandomBooks(): ResponseEntity<Any> {
+        return try {
+            val auth = SecurityContextHolder.getContext().authentication
+            val books = bookService.getRandomBooks(auth.name)
+            ResponseEntity.ok(books)
+        } catch (e: Exception) {
+            ResponseEntity.badRequest().body(e.message)
         }
     }
 }

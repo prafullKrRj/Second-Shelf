@@ -16,7 +16,7 @@ class AuthController(
     fun addUser(@RequestBody userDto: UserDto): ResponseEntity<Any> {
         try {
             userService.saveNewUser(userDto)
-            return ResponseEntity.ok(RegisterResponse(true, "User registered successfully"))
+            return ResponseEntity.ok(GeneralResponse(true, "User logged in successfully"))
         } catch (e: Exception) {
             return ResponseEntity.badRequest().body(e.message)
         }
@@ -25,20 +25,15 @@ class AuthController(
     @GetMapping("/login")
     fun login(): ResponseEntity<Any> {
         try {
-            SecurityContextHolder.getContext().authentication
-            return ResponseEntity.ok(LoginResponse(true, "User logged in successfully"))
+            val userInfo = userService.getUser(SecurityContextHolder.getContext().authentication.name)
+            return ResponseEntity.ok(userInfo.toDto())
         } catch (e: Exception) {
             return ResponseEntity.badRequest().body(e.message)
         }
     }
 }
 
-data class RegisterResponse(
-    val success: Boolean,
-    val message: String
-)
-
-data class LoginResponse(
+data class GeneralResponse(
     val success: Boolean,
     val message: String
 )

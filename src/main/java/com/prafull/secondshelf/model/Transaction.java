@@ -5,8 +5,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Table(name = "transactions")
 @NoArgsConstructor
@@ -32,10 +30,15 @@ public class Transaction {
     private Double amount;
 
     @Column(name = "transaction_date", nullable = false)
-    private LocalDateTime transactionDate = LocalDateTime.now();
+    private Long transactionDate = System.currentTimeMillis();
 
     public Transaction(TransactionDto dto) {
         this.amount = dto.getAmount();
         this.transactionDate = dto.getTransactionDate();
     }
+
+    public TransactionDto toDto() {
+        return new TransactionDto(this.id, this.book.getId(), this.amount, this.transactionDate, this.seller.getUsername(), this.buyer.getUsername());
+    }
 }
+
