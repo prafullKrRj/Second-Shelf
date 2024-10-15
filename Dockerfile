@@ -2,8 +2,8 @@
 FROM gradle:7.5.1-jdk17 AS build
 WORKDIR /app
 COPY . /app
-RUN chmod +x ./gradlew  # Add this line to make gradlew executable
-RUN ./gradlew clean build --no-daemon
+RUN chmod +x ./gradlew
+RUN ./gradlew clean build --no-daemon --warning-mode all  # Enable detailed warnings
 
 # Run stage
 FROM openjdk:17-alpine
