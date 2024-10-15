@@ -2,7 +2,7 @@
 FROM gradle:7.5.1-jdk17 AS build
 WORKDIR /app
 COPY . /app
-RUN ./gradlew clean build
+RUN ./gradlew clean build --no-daemon
 
 # Run stage
 FROM openjdk:17-alpine
