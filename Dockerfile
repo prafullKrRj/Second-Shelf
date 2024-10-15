@@ -1,8 +1,8 @@
 # Build stage
-# Build stage
 FROM gradle:7.5.1-jdk17 AS build
 WORKDIR /app
 COPY . /app
+RUN chmod +x gradlew
 RUN ./gradlew clean build
 
 FROM openjdk:17-alpine
