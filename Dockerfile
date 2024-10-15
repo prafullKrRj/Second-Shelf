@@ -1,8 +1,9 @@
 # Build stage
-FROM maven:3.8.3-openjdk-17 AS build
+FROM gradle:7.5.1-jdk17 AS build
 WORKDIR /app
-COPY ./ app/
-RUN mvn clean package
+COPY . /app
+RUN gradle clean build
+
 
 FROM openjdk:17-alpine
 WORKDIR /app
