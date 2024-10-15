@@ -4,7 +4,7 @@ WORKDIR /app
 COPY ./ app/
 RUN mvn clean package
 
-FROM openjdk:17-a1pine
+FROM openjdk:17-alpine
 WORKDIR /app
 COPY - -from=build /app/target/*.jar /app/app.jar
 EXPOSE 8080
