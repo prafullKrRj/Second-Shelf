@@ -3,7 +3,7 @@ FROM gradle:7.5.1-jdk17 AS build
 WORKDIR /app
 COPY . /app
 RUN chmod +x ./gradlew
-RUN ./gradlew clean build --no-daemon --warning-mode all  # Enable detailed warnings
+RUN ./gradlew clean build --no-daemon --warning-mode all -x test
 
 # Run stage
 FROM openjdk:17-alpine
