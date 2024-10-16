@@ -8,7 +8,7 @@ RUN ./gradlew clean build --no-daemon --warning-mode all -x test
 # Run stage
 FROM openjdk:17-alpine
 WORKDIR /app
-COPY --from=build /build/libs/*.jar /app/app.jar
+COPY --from=build /build/libs/secondshelf-0.0.1-SNAPSHOT.jar /app/app.jar
 EXPOSE 8080
 ENV spring.datasource.url=${JDBC_DATABASE_URL}
 ENV spring.datasource.username=${JDBC_DATABASE_USERNAME}
