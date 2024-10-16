@@ -10,4 +10,7 @@ FROM openjdk:17-alpine
 WORKDIR /app
 COPY --from=build /app/build/libs/*.jar /app/app.jar
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+ENV spring.datasource.url=${JDBC_DATABASE_URL}
+ENV spring.datasource.username=${JDBC_DATABASE_USERNAME}
+ENV spring.datasource.password=${JDBC_DATABASE_PASSWORD}
+ENTRYPOINT ["java", "-jar", "/app/build/libs/secondshelf-0.0.1-SNAPSHOT.jar"]

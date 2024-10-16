@@ -39,3 +39,8 @@ compileKotlin {
         jvmTarget = '17'
     }
 }
+test {
+    environment "JDBC_DATABASE_URL", System.getenv("JDBC_DATABASE_URL")
+    environment "JDBC_DATABASE_USERNAME", System.getenv("JDBC_DATABASE_USERNAME")
+    environment "JDBC_DATABASE_PASSWORD", System.getenv("JDBC_DATABASE_PASSWORD")
+}
