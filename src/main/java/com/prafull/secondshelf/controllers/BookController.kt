@@ -30,9 +30,9 @@ class BookController(
         return try {
             val auth = SecurityContextHolder.getContext().authentication
             val book = bookService.addBook(auth.name, bookDto)
-            ResponseEntity.ok(book)
+            ResponseEntity.ok(GeneralResponse(success = true, "Book added successfully"))
         } catch (e: Exception) {
-            ResponseEntity.badRequest().body(e)
+            ResponseEntity.badRequest().body(GeneralResponse(success = false, e.message ?: "Something went wrong"))
         }
     }
 
