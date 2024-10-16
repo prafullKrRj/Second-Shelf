@@ -13,4 +13,4 @@ EXPOSE 8080
 ENV spring.datasource.url=${JDBC_DATABASE_URL}
 ENV spring.datasource.username=${JDBC_DATABASE_USERNAME}
 ENV spring.datasource.password=${JDBC_DATABASE_PASSWORD}
-ENTRYPOINT ["java", "-jar", "secondshelf/build/libs/secondshelf-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "/build/libs/secondshelf-0.0.1-SNAPSHOT.jar"]
