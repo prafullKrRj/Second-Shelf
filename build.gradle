@@ -36,7 +36,7 @@ tasks.named('test') {
 }
 
 compileKotlin {
-    kotlinOptions {
+     kotlinOptions {
         jvmTarget = '17'
     }
 }
