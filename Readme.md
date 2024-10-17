@@ -1,29 +1,23 @@
-# Second Shelf
 
-Second Shelf is an application designed to facilitate the resale of used books. This project is built using Java and
-Spring Boot, with Gradle as the build tool. The frontend will be developed in Android in the future.
+---
 
-## Project Structure
+# Second Shelf 📚
 
+**Second Shelf** is an innovative platform designed to help readers give their books a second life. Whether you’re looking to sell or buy used books, our app makes the process simple and accessible!
+
+## Features
+- **List your Books**: Easily upload details of the books you want to sell.
+- **Explore Listings**: Find a wide range of pre-loved books at affordable prices.
+- **User Management**: Secure user registration, login, and account features.
+- **Payment Integration**: Coming soon!
+
+## Live Demo
+Check out the live version of the app at [Second Shelf](https://second-shelf.onrender.com/).
+
+## Android Client
+Our mobile experience is powered by an Android Jetpack Compose application, available on the [Second Shelf Client](https://github.com/prafullKrRj/Second-Shelf-Client) repository.
+
+## Built With
 - **Backend**: Java, Kotlin, Spring Boot
-- **Build Tool**: Gradle
-- **Frontend**: Android (planned)
-
-## Package Structure
-
-- **com.prafull.secondshelf.repositories**
-    - `UserRepository.kt`: Interface for handling CRUD operations for `UserEntity`. Extends `JpaRepository` to provide
-      JPA related methods.
-
-- **com.prafull.secondshelf.services**
-    - `UserService.kt`: Service class for managing user-related operations. Future methods will include user
-      registration, authentication, and profile management.
-    - `BookService.kt`: Service class for managing book-related operations. Future methods will include adding new
-      books, updating book details, and handling book resale transactions.
-
-## Future Work
-
-- **Frontend Development**: The frontend will be developed using Android. It will include features for user
-  registration, book listing, and book purchasing.
-- **Additional Services**: More service classes will be added to handle other aspects of the application, such as
-  payment processing and notification management.
+- **Frontend**: Android Jetpack Compose
+- **Database**: MySQL
